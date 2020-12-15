@@ -52,8 +52,7 @@ void producerConsumers(int* nums, double* res, int sizeArr) {
 
             MPI_Send(&i, 1, MPI_INT, status.MPI_SOURCE, 0, MPI_COMM_WORLD);
         }
-    }
-    else {
+    } else {
         double tmp = 0;
         MPI_Send(&tmp, 1, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
         bool flag = true;
@@ -64,8 +63,7 @@ void producerConsumers(int* nums, double* res, int sizeArr) {
             MPI_Recv(&num, 1, MPI_INT, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
             if (status.MPI_TAG == 0) {
                 flag = false;
-            }
-            else {
+            } else {
                 tmp = sqrt(num);
                 MPI_Send(&tmp, 1, MPI_DOUBLE, 0, status.MPI_TAG, MPI_COMM_WORLD);
             }
