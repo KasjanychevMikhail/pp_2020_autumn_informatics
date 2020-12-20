@@ -8,10 +8,12 @@ TEST(Parallel_Operations_MPI, Test_1) {
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-    double roots[4];
     int nums[4] = { 4, 36, 9, 16 };
+	double roots[4];
     double real_roots[4] = { 2, 6, 3, 4 };
+    double firstT = MPI_Wtime();
     sqrNum(nums, roots, 4);
+    double secondT = MPI_Wtime();
     bool flag = true;
 
     for (int i = 0; i < 4; i++) {
@@ -22,6 +24,7 @@ TEST(Parallel_Operations_MPI, Test_1) {
     }
 
     if (rank == 0) {
+        std::cout << secondT - firstT << std::endl;
         EXPECT_TRUE(flag);
     }
 }
@@ -31,7 +34,9 @@ TEST(Parallel_Operations_MPI, Test_2) {
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
     int nums[4] = { 0, 1, 2, 3 };
+    double firstT = MPI_Wtime();
     int* test_nums = generateNum(4);
+    double secondT = MPI_Wtime();
     bool flag = true;
 
     for (int i = 0; i < 4; i++) {
@@ -41,6 +46,7 @@ TEST(Parallel_Operations_MPI, Test_2) {
         }
     }
     if (rank == 0) {
+        std::cout << secondT - firstT << std::endl;
         EXPECT_TRUE(flag);
     }
 }
@@ -55,7 +61,9 @@ TEST(Parallel_Operations_MPI, Test_3) {
     double real_roots[4];
     sqrNum(nums, real_roots, 4);
 
+    double firstT = MPI_Wtime();
     producerConsumers(nums, roots, 4);
+    double secondT = MPI_Wtime();
 
     bool flag = true;
 
@@ -66,6 +74,7 @@ TEST(Parallel_Operations_MPI, Test_3) {
         }
     }
     if (rank == 0) {
+        std::cout << secondT - firstT << std::endl;
         EXPECT_TRUE(flag);
     }
 }
@@ -78,7 +87,9 @@ TEST(Parallel_Operations_MPI, Test_4) {
     double roots[4];
     double real_roots[4] = { 2, 4, 3, 6 };
 
+    double firstT = MPI_Wtime();
     producerConsumers(nums, roots, 4);
+    double secondT = MPI_Wtime();
 
     bool flag = true;
 
@@ -89,6 +100,7 @@ TEST(Parallel_Operations_MPI, Test_4) {
         }
     }
     if (rank == 0) {
+        std::cout << secondT - firstT << std::endl;
         EXPECT_FALSE(flag);
     }
 }
