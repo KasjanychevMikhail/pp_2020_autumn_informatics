@@ -81,17 +81,15 @@ void BatcherSort(std::vector<int>* res) {
     createNet(size);
     int sizeNew = _size + ((_size % size) ? (size - (_size % size)) : 0);
     int elems_per_proc_size = sizeNew / size;
-    
     for (int i = _size; i < sizeNew; i++) {
         res->push_back(INT16_MIN);
     }
-    
     std::vector<int> elems_res(elems_per_proc_size);
     std::vector<int> elems_cur(elems_per_proc_size);
     std::vector<int> elems_tmp(elems_per_proc_size);
-    MPI_Scatter(&(*res)[0], elems_per_proc_size, MPI_INT, &elems_res[0], elems_per_proc_size, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Scatter(&(*res)[0], elems_per_proc_size, MPI_INT, 
+        &elems_res[0], elems_per_proc_size, MPI_INT, 0, MPI_COMM_WORLD);
     std::sort(elems_res.begin(), elems_res.end());
-    
     for (int i = 0; i < comparators.size(); i++) {
         std::pair<int, int> comparator = comparators[i];
         if (rank == comparator.first) {
@@ -99,7 +97,6 @@ void BatcherSort(std::vector<int>* res) {
                 comparator.second, 0, MPI_COMM_WORLD);
             MPI_Recv(&elems_cur[0], elems_per_proc_size, MPI_INT,
                 comparator.second, 0, MPI_COMM_WORLD, &status);
-
             for (int resInd = 0, curInd = 0, tmpInd = 0;
                 tmpInd < elems_per_proc_size; tmpInd++) {
                 int res = elems_res[resInd];
@@ -112,7 +109,6 @@ void BatcherSort(std::vector<int>* res) {
                     curInd++;
                 }
             }
-
             elems_res.swap(elems_tmp);
         }
         else if (rank == comparator.second) {
@@ -136,8 +132,8 @@ void BatcherSort(std::vector<int>* res) {
             elems_res.swap(elems_tmp);
         }
     }
-
-    MPI_Gather(&elems_res[0], elems_per_proc_size, MPI_INT, &(*res)[0], elems_per_proc_size, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Gather(&elems_res[0], elems_per_proc_size, MPI_INT, 
+        &(*res)[0], elems_per_proc_size, MPI_INT, 0, MPI_COMM_WORLD);
     int diffElem = sizeNew - _size;
     if (rank == 0 && diffElem) {
         res->erase(res->begin(), res->begin() + diffElem);
