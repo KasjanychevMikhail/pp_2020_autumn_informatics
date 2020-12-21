@@ -90,7 +90,7 @@ void BatcherSort(std::vector<int>* res) {
     MPI_Scatter(&(*res)[0], elems_per_proc_size, MPI_INT,
         &elems_res[0], elems_per_proc_size, MPI_INT, 0, MPI_COMM_WORLD);
     std::sort(elems_res.begin(), elems_res.end());
-    for (int i = 0; i < comparators.size(); i++) {
+    for (uint32_t i = 0; i < comparators.size(); i++) {
         std::pair<int, int> comparator = comparators[i];
         if (rank == comparator.first) {
             MPI_Send(&elems_res[0], elems_per_proc_size, MPI_INT,
