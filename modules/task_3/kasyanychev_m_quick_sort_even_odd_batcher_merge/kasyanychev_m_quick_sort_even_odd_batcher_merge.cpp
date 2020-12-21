@@ -87,7 +87,7 @@ void BatcherSort(std::vector<int>* res) {
     std::vector<int> elems_res(elems_per_proc_size);
     std::vector<int> elems_cur(elems_per_proc_size);
     std::vector<int> elems_tmp(elems_per_proc_size);
-    MPI_Scatter(&(*res)[0], elems_per_proc_size, MPI_INT, 
+    MPI_Scatter(&(*res)[0], elems_per_proc_size, MPI_INT,
         &elems_res[0], elems_per_proc_size, MPI_INT, 0, MPI_COMM_WORLD);
     std::sort(elems_res.begin(), elems_res.end());
     for (int i = 0; i < comparators.size(); i++) {
@@ -110,8 +110,7 @@ void BatcherSort(std::vector<int>* res) {
                 }
             }
             elems_res.swap(elems_tmp);
-        }
-        else if (rank == comparator.second) {
+        } else if (rank == comparator.second) {
             MPI_Recv(&elems_cur[0], elems_per_proc_size, MPI_INT,
                 comparator.first, 0, MPI_COMM_WORLD, &status);
             MPI_Send(&elems_res[0], elems_per_proc_size, MPI_INT,
@@ -132,7 +131,7 @@ void BatcherSort(std::vector<int>* res) {
             elems_res.swap(elems_tmp);
         }
     }
-    MPI_Gather(&elems_res[0], elems_per_proc_size, MPI_INT, 
+    MPI_Gather(&elems_res[0], elems_per_proc_size, MPI_INT,
         &(*res)[0], elems_per_proc_size, MPI_INT, 0, MPI_COMM_WORLD);
     int diffElem = sizeNew - _size;
     if (rank == 0 && diffElem) {
