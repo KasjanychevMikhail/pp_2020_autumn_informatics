@@ -10,7 +10,6 @@ TEST(Parallel_Operations_MPI, Test_1) {
 
     int nums[4] = { 4, 36, 9, 16 };
     double roots[4];
-    int nums[4] = { 4, 36, 9, 16 };
     double real_roots[4] = { 2, 6, 3, 4 };
     sqrNum(nums, roots, 4);
     bool flag = true;
