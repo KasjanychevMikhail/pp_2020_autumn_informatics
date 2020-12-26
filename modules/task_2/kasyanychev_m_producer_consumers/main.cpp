@@ -9,8 +9,8 @@ TEST(Parallel_Operations_MPI, Test_1) {
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
 	
-	int nums[4] = { 4, 36, 9, 16 };
-	double roots[4];
+    int nums[4] = { 4, 36, 9, 16 };
+    double roots[4];
     double real_roots[4] = { 2, 6, 3, 4 };
     double firstT = MPI_Wtime();
     sqrNum(nums, roots, 4);
